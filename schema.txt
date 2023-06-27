@@ -1,0 +1,36 @@
+countries
+{
+	_id: ObjectId(),
+	countryName: "aaaa"
+}
+
+cities
+{
+	_id: ObjectId(),
+	cityName: "aaaa",
+	countryId: ObjectId() // -> countries 
+}
+
+offices
+{
+	_id: ObjectId(),
+	officeName: "aaaa",
+	cityId: ObjectId() // -> cities
+}
+
+meetingRooms
+{
+	_id: ObjectId(),
+	roomName: "aaa",
+	officeId: ObjectId() // -> offices
+}
+
+reservations
+{
+	_id: ObjectId(),
+	startDateTime: ISODate(),
+	endDateTime: ISODate(),
+	meetingRoomId: ObjectId(), // -> meetingRooms
+	userId: ??? // -> AspNetUsers? Com funcionen els usuaris?
+	
+}
