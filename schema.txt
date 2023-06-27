@@ -1,36 +1,36 @@
-Countries
+countries
 {
 	"_id": ObjectId(),
-	"CountryName": "aaaa"
+	"countryName": "aaaa"
 }
 
-Cities
+cities
 {
 	"_id": ObjectId(),
-	"CityName": "aaaa",
-	"CountryId": ObjectId() // -> countries 
+	"cityName": "aaaa",
+	"countryId": ObjectId() // -> countries 
 }
 
-Offices
+offices
 {
 	"_id": ObjectId(),
-	"OfficeName": "aaaa",
-	"CityId": ObjectId() // -> cities
+	"officeName": "aaaa",
+	"cityId": ObjectId() // -> cities
 }
 
-MeetingRooms
+meetingRooms
 {
 	"_id": ObjectId(),
-	"RoomName": "aaa",
-	"OfficeId": ObjectId() // -> offices
+	"roomName": "aaa",
+	"officeId": ObjectId() // -> offices
 }
 
-Reservations
+reservations
 {
 	"_id": ObjectId(),
-	"StartDateTime": ISODate(),
-	"EndDateTime": ISODate(),
-	"MeetingRoomId": ObjectId(), // -> meetingRooms
-	"UserId": ??? // -> AspNetUsers? Com funcionen els usuaris?
+	"startDateTime": ISODate(),
+	"endDateTime": ISODate(),
+	"meetingRoomId": ObjectId(), // -> meetingRooms
+	"userId": ??? // -> AspNetUsers? Com funcionen els usuaris?
 	
 }
