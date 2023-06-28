@@ -4,7 +4,7 @@ namespace RoomsApiCrud.Models
     {
         public int StatusCode {get; set;}
         public string StatusMessage {get; set;}
-        public Country country {get; set;}
-        public List<Country> countryList {get; set;}
+        // public Country? Country {get; set;}
+        // public List<Country>? CountryList {get; set;}
     }
 }

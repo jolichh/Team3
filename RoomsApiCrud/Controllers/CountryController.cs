@@ -50,12 +50,38 @@ namespace RoomsApiCrud.Controllers
                 return JsonConvert.SerializeObject(countryList);
             }
             
-            Response response = new();
+            CountryResponse response = new();
             response.StatusCode = 500;
             response.StatusMessage = "Failure.";
             return JsonConvert.SerializeObject(response);
         }
 
+        [HttpGet]
+        [Route("GetCountryById/{id}")]
+        public string GetCountryById(int id)
+        {
+            SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
+            
+            SqlDataAdapter dataAdapter = new("SELECT * FROM countries WHERE _id = '"+id+"'", connection);
+            DataTable dataTable = new();
+            dataAdapter.Fill(dataTable);
+            Country country = new();
+            if (dataTable.Rows.Count > 0)
+            {
+                country.Id = Convert.ToInt32(dataTable.Rows[0]["_id"]);
+                country.Name = Convert.ToString(dataTable.Rows[0]["_name"]);
+            }
+
+            if (country.Name != null)
+            {
+                return JsonConvert.SerializeObject(country);
+            }
+            
+            CountryResponse response = new();
+            response.StatusCode = 500;
+            response.StatusMessage = "Failure.";
+            return JsonConvert.SerializeObject(response);
+        }
     }
 
 }
