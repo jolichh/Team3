@@ -26,9 +26,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpGet]
         [Route("GetAllCountries")]
-        public string GetAllCountries()
+        public string GetAllCountries(SqlConnection connection)
         {
-            SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
+            //SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
             
             SqlDataAdapter dataAdapter = new("SELECT * FROM countries", connection);
             DataTable dataTable = new();
@@ -52,15 +52,15 @@ namespace RoomsApiCrud.Controllers
             
             CountryResponse response = new();
             response.StatusCode = 500;
-            response.StatusMessage = "Failure.";
+            response.StatusMessage = "Operation failed.";
             return JsonConvert.SerializeObject(response);
         }
 
         [HttpGet]
         [Route("GetCountryById/{id}")]
-        public string GetCountryById(int id)
+        public string GetCountryById(SqlConnection connection, int id)
         {
-            SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
+            //SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
             
             SqlDataAdapter dataAdapter = new("SELECT * FROM countries WHERE _id = '"+id+"'", connection);
             DataTable dataTable = new();
@@ -79,7 +79,29 @@ namespace RoomsApiCrud.Controllers
             
             CountryResponse response = new();
             response.StatusCode = 500;
-            response.StatusMessage = "Failure.";
+            response.StatusMessage = "Operation failed.";
+            return JsonConvert.SerializeObject(response);
+        }
+
+        [HttpPost]
+        [Route("AddCountry")]
+        public string AddCountry(SqlConnection connection, Country country)
+        {
+            SqlCommand command = new("INSERT INTO Countries (_name) VALUES ('"+country.Name+"')", connection);
+            connection.Open();
+            int commandStatus = command.ExecuteNonQuery();
+            connection.Close();
+
+            CountryResponse response = new();
+            if (commandStatus > 0)
+            {
+                response.StatusCode = 201;
+                response.StatusMessage = "Success.";
+                return JsonConvert.SerializeObject(response);
+            }
+
+            response.StatusCode = 500;
+            response.StatusMessage = "Operation failed.";
             return JsonConvert.SerializeObject(response);
         }
     }
