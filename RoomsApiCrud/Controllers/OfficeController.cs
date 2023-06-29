@@ -43,7 +43,7 @@ namespace RoomsApiCrud.Controllers
                     {
                         Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
                         Name = Convert.ToString(queryResults.Rows[i]["name"]),
-                        CityId = Convert.ToInt32(queryResults.Rows[i]["office_id"])
+                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
                     };
                     officeList.Add(office);
                 }
@@ -105,7 +105,7 @@ namespace RoomsApiCrud.Controllers
         [Route("AddOffice")]
         public string AddOffice(SqlConnection connection, Office office)
         {
-            SqlCommand command = new("INSERT INTO offices (name) VALUES ('"+office.Name+"')", connection);
+            SqlCommand command = new("INSERT INTO offices (name) VALUES ('"+office.Name+"', '"+office.CityId+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
@@ -122,7 +122,7 @@ namespace RoomsApiCrud.Controllers
         [Route("UpdateOffice")]
         public string UpdateOffice(SqlConnection connection, Office office)
         {
-            SqlCommand command = new("UPDATE offices SET name = '"+office.Name+"' WHERE id = '"+office.Id+"'", connection);
+            SqlCommand command = new("UPDATE offices SET name = '"+office.Name+"', city_id = '"+office.CityId+"' WHERE id = '"+office.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();

@@ -15,97 +15,97 @@ namespace RoomsApiCrud.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CityController : ControllerBase
+    public class RoomController : ControllerBase
     {
         public readonly IConfiguration _configuration;
         public readonly string _connectionString;
 
-        public CityController(IConfiguration configuration)
+        public RoomController(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
         }
 
         [HttpGet]
-        [Route("GetAllCities")]
-        public string GetAllCities()
+        [Route("GetAllRooms")]
+        public string GetAllRooms()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM cities";
+            string query = "SELECT * FROM rooms";
             DataTable queryResults = DAL.Query(query, connection);
 
-            List<IModel> cityList = new();
+            List<IModel> roomList = new();
             if (queryResults.Rows.Count > 0)
             {
                 for (int i = 0; i < queryResults.Rows.Count; i++)
                 {
-                    City city = new()
+                    Room room = new()
                     {
                         Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
                         Name = Convert.ToString(queryResults.Rows[i]["name"]),
-                        CountryId = Convert.ToInt32(queryResults.Rows[i]["country_id"])
+                        OfficeId = Convert.ToInt32(queryResults.Rows[i]["office_id"])
                     };
-                    cityList.Add(city);
+                    roomList.Add(room);
                 }
             }
 
-            if (cityList.Count > 0)
+            if (roomList.Count > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(roomList, 200));
             }
 
             return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
-        [Route("GetCityByName/{name}")]
-        public string GetCityByName(string name)
+        [Route("GetRoomByName/{name}")]
+        public string GetRoomByName(string name)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM cities WHERE name = '" + name + "'";
+            string queryString = "SELECT * FROM rooms WHERE name = '" + name + "'";
             DataTable queryResults = DAL.Query(queryString, connection);
 
             if (queryResults.Rows.Count > 0)
             {
-                City city = new() 
+                Room room = new() 
                 {
                     Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
                     Name = Convert.ToString(queryResults.Rows[0]["name"]),
-                    CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
+                    OfficeId = Convert.ToInt32(queryResults.Rows[0]["office_id"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
+                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(room, 200));
             }
 
             return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
-        [Route("GetCityById/{id}")]
-        public string GetCityById(int id)
+        [Route("GetRoomById/{id}")]
+        public string GetRoomById(int id)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM cities WHERE id = '" + id + "'";
+            string queryString = "SELECT * FROM room WHERE id = '" + id + "'";
             DataTable queryResults = DAL.Query(queryString, connection);
 
             if (queryResults.Rows.Count > 0)
             {
-                City city = new() 
+                Room room = new() 
                 {
                     Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
                     Name = Convert.ToString(queryResults.Rows[0]["name"]),
-                    CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
+                    OfficeId = Convert.ToInt32(queryResults.Rows[0]["office_id"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
+                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(room, 200));
             }
 
             return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpPost]
-        [Route("AddCity")]
-        public string AddCity(SqlConnection connection, City city)
+        [Route("AddRoom")]
+        public string AddRoom(SqlConnection connection, Room room)
         {
-            SqlCommand command = new("INSERT INTO cities (name) VALUES ('"+city.Name+"', '"+city.CountryId+"')", connection);
+            SqlCommand command = new("INSERT INTO rooms (name) VALUES ('"+room.Name+"', '"+room.OfficeId+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
@@ -119,10 +119,10 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateCity")]
-        public string UpdateCity(SqlConnection connection, City city)
+        [Route("UpdateRoom")]
+        public string UpdateRoom(SqlConnection connection, Room room)
         {
-            SqlCommand command = new("UPDATE cities SET name = '"+city.Name+"', country_id = '"+city.CountryId+"' WHERE id = '"+city.Id+"'", connection);
+            SqlCommand command = new("UPDATE room SET name = '"+room.Name+"', office_id = '"+room.OfficeId+"' WHERE id = '"+room.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
@@ -136,10 +136,10 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteCity/{id}")]
-        public string DeleteCity(SqlConnection connection, int id)
+        [Route("DeleteRoom/{id}")]
+        public string DeleteRoom(SqlConnection connection, int id)
         {
-            SqlCommand command = new("DELETE FROM cities WHERE id = '"+id+"'", connection);
+            SqlCommand command = new("DELETE FROM rooms WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
