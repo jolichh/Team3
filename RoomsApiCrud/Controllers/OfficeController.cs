@@ -58,7 +58,7 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllOfficesByCity/{city}")]
+        [Route("GetAllOfficesByCity/{city.id}")]
         public string GetAllOfficesByCity(City city)
         {
             SqlConnection connection = DAL.Connect(_connectionString);

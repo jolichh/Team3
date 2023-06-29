@@ -61,11 +61,79 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByOffice/{office}")]
+        [Route("GetAllReservationsByOffice/{office.id}")]
         public string GetAllReservationsByOffice(Office office)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations WHERE office_id = '"+office.Id+"'";
+            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id AND offices.id = '"+office.Id+"'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> reservationList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Reservation reservation = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["reservations.id"]),
+                        Date = Convert.ToDateTime(queryResults.Rows[i]["reservations.date"]),
+                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.start_time"]),
+                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.end_time"]),
+                        RoomId = Convert.ToInt32(queryResults.Rows[i]["reservations.room_id"]),
+                        UserId = Convert.ToInt32(queryResults.Rows[i]["reservations.user_id"])
+                    };
+                    reservationList.Add(reservation);
+                }
+            }
+
+            if (reservationList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
+        [Route("GetAllReservationsByRoom/{room.id}")]
+        public string GetAllReservationsByRoom(Room room)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM reservations WHERE room_id = '"+room.Id+"'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> reservationList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Reservation reservation = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Date = Convert.ToDateTime(queryResults.Rows[i]["date"]),
+                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["start_time"]),
+                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["end_time"]),
+                        RoomId = Convert.ToInt32(queryResults.Rows[i]["room_id"]),
+                        UserId = Convert.ToInt32(queryResults.Rows[i]["user_id"])
+                    };
+                    reservationList.Add(reservation);
+                }
+            }
+
+            if (reservationList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
+        [Route("GetAllReservationsByUser/{id}")]
+        public string GetAllReservationsByUser(int id)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM reservations WHERE user_id = '"+id+"'";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> reservationList = new();
@@ -119,31 +187,6 @@ namespace RoomsApiCrud.Controllers
             return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
-        [HttpGet]
-        [Route("GetReservationByOfficeId/{office_id}")]
-        public string GetReservationByOfficeId(string officeId)
-        {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM reservations WHERE office_id = '" + officeId + "'";
-            DataTable queryResults = DAL.Query(queryString, connection);
-
-            if (queryResults.Rows.Count > 0)
-            {
-                Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[0]["date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[0]["start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[0]["end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[0]["room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[0]["user_id"])
-                    };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(reservation, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
-        }
-
         [HttpPost]
         [Route("AddReservation")]
         public string AddReservation(Reservation reservation)
@@ -167,7 +210,7 @@ namespace RoomsApiCrud.Controllers
         public string UpdateReservation(Reservation reservation)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("UPDATE offices SET id = '"+reservation.Id+"', date = '"+reservation.Date+"', start_time = '"+reservation.StartTime+"', end_time = '"+reservation.EndTime+"', room_id = '"+reservation.RoomId+"', user_id = '"+reservation.UserId+"' WHERE id = '"+reservation.Id+"'", connection);
+            SqlCommand command = new("UPDATE reservations SET id = '"+reservation.Id+"', date = '"+reservation.Date+"', start_time = '"+reservation.StartTime+"', end_time = '"+reservation.EndTime+"', room_id = '"+reservation.RoomId+"', user_id = '"+reservation.UserId+"' WHERE id = '"+reservation.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
@@ -181,11 +224,11 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteOffice/{id}")]
-        public string DeleteOffice(int id)
+        [Route("DeleteReservation/{id}")]
+        public string DeleteReservation(int id)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("DELETE FROM offices WHERE id = '"+id+"'", connection);
+            SqlCommand command = new("DELETE FROM reservations WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
