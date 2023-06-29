@@ -1,24 +1,24 @@
 countries
-	_id
-	_name
+	country_id
+	country_name
 	
 cities
-	_id
-	_name
+	city_id
+	city_name
 	country_id -> fk countries
 	
 offices
-	_id
-	_name
+	office_id
+	office_name
 	city_id -> fk cities
 	
 rooms
-	_id
-	_name
+	room_id
+	room_name
 	office_id -> fk offices
 	
 reservations
-	_id
+	reservation_id
 	date
 	start_time
 	end_time

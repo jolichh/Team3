@@ -33,14 +33,17 @@ namespace RoomsApiCrud.Controllers
             SqlConnection connection = DAL.Connect(_connectionString);
             string query = "SELECT * FROM countries";
             DataTable queryResults = DAL.Query(query, connection);
+
             List<Country> countryList = new();
             if (queryResults.Rows.Count > 0)
             {
                 for (int i = 0; i < queryResults.Rows.Count; i++)
                 {
-                    Country country = new();
-                    country.Id = Convert.ToInt32(queryResults.Rows[i]["_id"]);
-                    country.Name = Convert.ToString(queryResults.Rows[i]["_name"]);
+                    Country country = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["_id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["_name"])
+                    };
                     countryList.Add(country);
                 }
             }
@@ -49,38 +52,28 @@ namespace RoomsApiCrud.Controllers
             {
                 return JsonConvert.SerializeObject(countryList);
             }
-            
-            CountryResponse response = new();
-            response.StatusCode = 500;
-            response.StatusMessage = "Operation failed.";
-            return JsonConvert.SerializeObject(response);
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
         [Route("GetCountryById/{name}")]
-        public string GetCountryByName(SqlConnection connection, string name)
+        public string GetCountryByName(string name)
         {
-            //SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
-            
-            SqlDataAdapter dataAdapter = new("SELECT * FROM countries WHERE _name = '"+name+"'", connection);
-            DataTable dataTable = new();
-            dataAdapter.Fill(dataTable);
-            Country country = new();
-            if (dataTable.Rows.Count > 0)
-            {
-                country.Id = Convert.ToInt32(dataTable.Rows[0]["_id"]);
-                country.Name = Convert.ToString(dataTable.Rows[0]["_name"]);
-            }
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string queryString = "SELECT * FROM countries WHERE _name = '" + name + "'";
+            DataTable queryResults = DAL.Query(queryString, connection);
 
-            if (country.Name != null)
+            Country country = new();
+            if (queryResults.Rows.Count > 0)
             {
+                country.Id = Convert.ToInt32(queryResults.Rows[0]["_id"]);
+                country.Name = Convert.ToString(queryResults.Rows[0]["_name"]);
+
                 return JsonConvert.SerializeObject(country);
             }
-            
-            CountryResponse response = new();
-            response.StatusCode = 500;
-            response.StatusMessage = "Operation failed.";
-            return JsonConvert.SerializeObject(response);
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpPost]
@@ -92,17 +85,16 @@ namespace RoomsApiCrud.Controllers
             int commandStatus = command.ExecuteNonQuery();
             connection.Close();
 
-            CountryResponse response = new();
+            Response<IModel?> response = new();
             if (commandStatus > 0)
             {
                 response.StatusCode = 201;
                 response.StatusMessage = "Success.";
+                response.Result = null;
                 return JsonConvert.SerializeObject(response);
             }
 
-            response.StatusCode = 500;
-            response.StatusMessage = "Operation failed.";
-            return JsonConvert.SerializeObject(response);
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
     }
 
