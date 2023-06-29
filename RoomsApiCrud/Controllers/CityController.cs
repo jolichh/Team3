@@ -137,7 +137,7 @@ namespace RoomsApiCrud.Controllers
         public string AddCity(City city)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("INSERT INTO cities (name) VALUES ('"+city.Name+"', '"+city.CountryId+"')", connection);
+            SqlCommand command = new("INSERT INTO cities (name, country_id) VALUES ('"+city.Name+"', '"+city.CountryId+"')", connection);
             int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)

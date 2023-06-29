@@ -106,7 +106,7 @@ namespace RoomsApiCrud.Controllers
         public string AddRoom(Room room)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("INSERT INTO rooms (name) VALUES ('"+room.Name+"', '"+room.OfficeId+"')", connection);
+            SqlCommand command = new("INSERT INTO rooms (name, office_id) VALUES ('"+room.Name+"', '"+room.OfficeId+"')", connection);
             int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)

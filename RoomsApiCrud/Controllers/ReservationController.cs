@@ -192,7 +192,7 @@ namespace RoomsApiCrud.Controllers
         public string AddReservation(Reservation reservation)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("INSERT INTO reservations VALUES ('"+reservation.Id+"', '"+reservation.Date+"', '"+reservation.StartTime+"', '"+reservation.EndTime+"', '"+reservation.RoomId+"', '"+reservation.UserId+"',)", connection);
+            SqlCommand command = new("INSERT INTO reservations (date, start_time, end_time, room_id, user_id) VALUES ('"+reservation.Date+"', '"+reservation.StartTime+"', '"+reservation.EndTime+"', '"+reservation.RoomId+"', '"+reservation.UserId+"',)", connection);
             int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
