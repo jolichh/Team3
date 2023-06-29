@@ -12,23 +12,23 @@ namespace RoomsApiCrud.Models
             };
         }
 
-        public static Response<IModel> CreateSingleResultSuccess(IModel result, int code)
+        public static Response<IModel> CreateSingleResultSuccess(IModel? result, int code)
         {
             return new Response<IModel>()
             {
                 StatusCode = code,
                 StatusMessage = "Success",
-                Result = result
+                Result = result!
             };
         }
 
-        public static Response<List<IModel>> CreateListResultSuccess(List<IModel> result, int code)
+        public static Response<List<IModel>> CreateListResultSuccess(List<IModel>? result, int code)
         {
             return new Response<List<IModel>>()
             {
                 StatusCode = code,
                 StatusMessage = "Success",
-                Result = result
+                Result = result!
             };
         }
     }

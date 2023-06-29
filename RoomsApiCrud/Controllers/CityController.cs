@@ -65,12 +65,14 @@ namespace RoomsApiCrud.Controllers
             string queryString = "SELECT * FROM cities WHERE name = '" + name + "'";
             DataTable queryResults = DAL.Query(queryString, connection);
 
-            City city = new();
             if (queryResults.Rows.Count > 0)
             {
-                city.Id = Convert.ToInt32(queryResults.Rows[0]["id"]);
-                city.Name = Convert.ToString(queryResults.Rows[0]["name"]);
-
+                City city = new() 
+                {
+                    Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
+                    Name = Convert.ToString(queryResults.Rows[0]["name"]),
+                    CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
+                };
                 return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
             }
 
@@ -85,12 +87,14 @@ namespace RoomsApiCrud.Controllers
             string queryString = "SELECT * FROM cities WHERE id = '" + id + "'";
             DataTable queryResults = DAL.Query(queryString, connection);
 
-            City city = new();
             if (queryResults.Rows.Count > 0)
             {
-                city.Id = Convert.ToInt32(queryResults.Rows[0]["id"]);
-                city.Name = Convert.ToString(queryResults.Rows[0]["name"]);
-
+                City city = new() 
+                {
+                    Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
+                    Name = Convert.ToString(queryResults.Rows[0]["name"]),
+                    CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
+                };
                 return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
             }
 
