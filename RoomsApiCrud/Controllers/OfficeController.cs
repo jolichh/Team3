@@ -138,9 +138,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO offices (name) VALUES ('"+office.Name+"', '"+office.CityId+"')", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {
@@ -156,9 +154,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE offices SET name = '"+office.Name+"', city_id = '"+office.CityId+"' WHERE id = '"+office.Id+"'", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {
@@ -174,9 +170,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM offices WHERE id = '"+id+"'", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {

@@ -193,9 +193,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO reservations VALUES ('"+reservation.Id+"', '"+reservation.Date+"', '"+reservation.StartTime+"', '"+reservation.EndTime+"', '"+reservation.RoomId+"', '"+reservation.UserId+"',)", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {
@@ -211,9 +209,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE reservations SET id = '"+reservation.Id+"', date = '"+reservation.Date+"', start_time = '"+reservation.StartTime+"', end_time = '"+reservation.EndTime+"', room_id = '"+reservation.RoomId+"', user_id = '"+reservation.UserId+"' WHERE id = '"+reservation.Id+"'", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {
@@ -229,9 +225,7 @@ namespace RoomsApiCrud.Controllers
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM reservations WHERE id = '"+id+"'", connection);
-            connection.Open();
-            int commandStatus = command.ExecuteNonQuery();
-            connection.Close();
+            int commandStatus = DAL.Command(command, connection);
 
             if (commandStatus > 0)
             {

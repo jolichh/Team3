@@ -28,12 +28,13 @@ namespace RoomsApiCrud.Controllers
             return dataTable;
         }
 
-        public static DataTable Command(string commandString, SqlConnection connection)
+        public static int Command(SqlCommand command, SqlConnection connection)
         {
-            SqlDataAdapter dataAdapter = new(commandString, connection);
-            DataTable dataTable = new();
-            dataAdapter.Fill(dataTable);
-            return dataTable;
+            //SqlCommand command = new(commandString, connection);
+            connection.Open();
+            int statusValue = command.ExecuteNonQuery();
+            connection.Close();
+            return statusValue;
         }
     }
 }
