@@ -1,10 +1,9 @@
 namespace RoomsApiCrud.Models
 {
-    public class Response
+    public class Response<T>
     {
         public int StatusCode {get; set;} = -1;
         public string? StatusMessage {get; set;}
-        public IModel? IndividualResult {get; set;} = null;
-        public List<IModel>? ResultList {get; set;} = null;
+        public T Result {get; set;}
     }
 }
