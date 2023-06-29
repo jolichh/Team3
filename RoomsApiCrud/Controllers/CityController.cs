@@ -58,6 +58,37 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllCitiesByCountry/{country}")]
+        public string GetAllCities(Country country)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM cities WHERE country_id = '" + country.Id + "'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> cityList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    City city = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
+                        CountryId = Convert.ToInt32(queryResults.Rows[i]["country_id"])
+                    };
+                    cityList.Add(city);
+                }
+            }
+
+            if (cityList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
         [Route("GetCityByName/{name}")]
         public string GetCityByName(string name)
         {
@@ -103,8 +134,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPost]
         [Route("AddCity")]
-        public string AddCity(SqlConnection connection, City city)
+        public string AddCity(City city)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO cities (name) VALUES ('"+city.Name+"', '"+city.CountryId+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -120,8 +152,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPut]
         [Route("UpdateCity")]
-        public string UpdateCity(SqlConnection connection, City city)
+        public string UpdateCity(City city)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE cities SET name = '"+city.Name+"', country_id = '"+city.CountryId+"' WHERE id = '"+city.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -137,8 +170,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpDelete]
         [Route("DeleteCity/{id}")]
-        public string DeleteCity(SqlConnection connection, int id)
+        public string DeleteCity(int id)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM cities WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();

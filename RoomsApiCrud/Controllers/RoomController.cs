@@ -103,8 +103,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPost]
         [Route("AddRoom")]
-        public string AddRoom(SqlConnection connection, Room room)
+        public string AddRoom(Room room)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO rooms (name) VALUES ('"+room.Name+"', '"+room.OfficeId+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -120,8 +121,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPut]
         [Route("UpdateRoom")]
-        public string UpdateRoom(SqlConnection connection, Room room)
+        public string UpdateRoom(Room room)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE room SET name = '"+room.Name+"', office_id = '"+room.OfficeId+"' WHERE id = '"+room.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -137,8 +139,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpDelete]
         [Route("DeleteRoom/{id}")]
-        public string DeleteRoom(SqlConnection connection, int id)
+        public string DeleteRoom(int id)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM rooms WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();

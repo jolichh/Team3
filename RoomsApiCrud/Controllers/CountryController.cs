@@ -100,8 +100,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPost]
         [Route("AddCountry")]
-        public string AddCountry(SqlConnection connection, Country country)
+        public string AddCountry(Country country)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO countries (name) VALUES ('"+country.Name+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -117,8 +118,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPut]
         [Route("UpdateCountry")]
-        public string UpdateCountry(SqlConnection connection, Country country)
+        public string UpdateCountry(Country country)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE countries SET name = '"+country.Name+"' WHERE id = '"+country.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -134,8 +136,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpDelete]
         [Route("DeleteCountry/{id}")]
-        public string DeleteCountry(SqlConnection connection, int id)
+        public string DeleteCountry(int id)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM countries WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();

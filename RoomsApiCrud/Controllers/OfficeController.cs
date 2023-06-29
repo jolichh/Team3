@@ -58,6 +58,37 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllOfficesByCity/{city}")]
+        public string GetAllOfficesByCity(City city)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM offices WHERE city_id = '"+city.Id+"'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> officeList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Office office = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
+                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
+                    };
+                    officeList.Add(office);
+                }
+            }
+
+            if (officeList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(officeList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
         [Route("GetOfficeByName/{name}")]
         public string GetOfficeByName(string name)
         {
@@ -103,8 +134,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPost]
         [Route("AddOffice")]
-        public string AddOffice(SqlConnection connection, Office office)
+        public string AddOffice(Office office)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO offices (name) VALUES ('"+office.Name+"', '"+office.CityId+"')", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -120,8 +152,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpPut]
         [Route("UpdateOffice")]
-        public string UpdateOffice(SqlConnection connection, Office office)
+        public string UpdateOffice(Office office)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE offices SET name = '"+office.Name+"', city_id = '"+office.CityId+"' WHERE id = '"+office.Id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
@@ -137,8 +170,9 @@ namespace RoomsApiCrud.Controllers
 
         [HttpDelete]
         [Route("DeleteOffice/{id}")]
-        public string DeleteOffice(SqlConnection connection, int id)
+        public string DeleteOffice(int id)
         {
+            SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM offices WHERE id = '"+id+"'", connection);
             connection.Open();
             int commandStatus = command.ExecuteNonQuery();
