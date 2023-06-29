@@ -18,29 +18,29 @@ namespace RoomsApiCrud.Controllers
     public class CountryController : ControllerBase
     {
         public readonly IConfiguration _configuration;
+        public readonly string _connectionString;
 
         public CountryController(IConfiguration configuration)
         {
             _configuration = configuration;
+            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
         }
 
         [HttpGet]
         [Route("GetAllCountries")]
-        public string GetAllCountries(SqlConnection connection)
+        public string GetAllCountries()
         {
-            //SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
-            
-            SqlDataAdapter dataAdapter = new("SELECT * FROM countries", connection);
-            DataTable dataTable = new();
-            dataAdapter.Fill(dataTable);
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM countries";
+            DataTable queryResults = DAL.Query(query, connection);
             List<Country> countryList = new();
-            if (dataTable.Rows.Count > 0)
+            if (queryResults.Rows.Count > 0)
             {
-                for (int i = 0; i < dataTable.Rows.Count; i++)
+                for (int i = 0; i < queryResults.Rows.Count; i++)
                 {
                     Country country = new();
-                    country.Id = Convert.ToInt32(dataTable.Rows[i]["_id"]);
-                    country.Name = Convert.ToString(dataTable.Rows[i]["_name"]);
+                    country.Id = Convert.ToInt32(queryResults.Rows[i]["_id"]);
+                    country.Name = Convert.ToString(queryResults.Rows[i]["_name"]);
                     countryList.Add(country);
                 }
             }
@@ -57,12 +57,12 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetCountryById/{id}")]
-        public string GetCountryById(SqlConnection connection, int id)
+        [Route("GetCountryById/{name}")]
+        public string GetCountryByName(SqlConnection connection, string name)
         {
             //SqlConnection connection = new(_configuration.GetConnectionString("RoomsApiCrudConn").ToString());
             
-            SqlDataAdapter dataAdapter = new("SELECT * FROM countries WHERE _id = '"+id+"'", connection);
+            SqlDataAdapter dataAdapter = new("SELECT * FROM countries WHERE _name = '"+name+"'", connection);
             DataTable dataTable = new();
             dataAdapter.Fill(dataTable);
             Country country = new();
