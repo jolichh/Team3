@@ -1,26 +1,45 @@
 countries
-	country_id
-	country_name
+	id
+	name
 	
 cities
-	city_id
-	city_name
+	id
+	name
 	country_id -> fk countries
 	
 offices
-	office_id
-	office_name
+	id
+	name
 	city_id -> fk cities
 	
 rooms
-	room_id
-	room_name
+	id
+	name
 	office_id -> fk offices
 	
 reservations
-	reservation_id
+	id
 	date
 	start_time
 	end_time
 	room_id -> fk rooms
 	user_id -> fk AspNetUsers
+	
+roomsApiCrudUsers
+	id
+	userName
+	userFamilyName
+	userSecondFamilyName
+	normalizedUserName
+	email
+	normalizedEmail
+	emailConfirmed
+	passwordHash
+	phoneNumber
+	phoneNumberConfirmed
+	twoFactorEnabled
+	
+roomsApiCrudRoles
+	id
+	name
+	normalizedName

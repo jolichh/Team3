@@ -30,8 +30,8 @@ namespace RoomsApiCrud.Controllers
         [Route("GetAllCities")]
         public string GetAllCities()
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
             string query = "SELECT * FROM dbo.cities";
+            SqlConnection connection = DAL.Connect(_connectionString);
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> cityList = new();
@@ -61,8 +61,8 @@ namespace RoomsApiCrud.Controllers
         [Route("GetAllCitiesByCountryId/{countryId}")]
         public string GetAllCitiesByCountry(int countryId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
             string query = "SELECT * FROM cities WHERE country_id = '" +countryId+ "'";
+            SqlConnection connection = DAL.Connect(_connectionString);
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> cityList = new();
@@ -92,8 +92,8 @@ namespace RoomsApiCrud.Controllers
         [Route("GetCityByName/{name}")]
         public string GetCityByName(string name)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
             string queryString = "SELECT * FROM cities WHERE name = '" + name + "'";
+            SqlConnection connection = DAL.Connect(_connectionString);
             DataTable queryResults = DAL.Query(queryString, connection);
 
             if (queryResults.Rows.Count > 0)
@@ -114,8 +114,8 @@ namespace RoomsApiCrud.Controllers
         [Route("GetCityById/{id}")]
         public string GetCityById(int id)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
             string queryString = "SELECT * FROM cities WHERE id = '" + id + "'";
+            SqlConnection connection = DAL.Connect(_connectionString);
             DataTable queryResults = DAL.Query(queryString, connection);
 
             if (queryResults.Rows.Count > 0)

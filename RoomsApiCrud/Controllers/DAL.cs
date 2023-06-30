@@ -30,7 +30,6 @@ namespace RoomsApiCrud.Controllers
 
         public static int Command(SqlCommand command, SqlConnection connection)
         {
-            //SqlCommand command = new(command, connection);
             connection.Open();
             int statusValue = command.ExecuteNonQuery();
             connection.Close();
