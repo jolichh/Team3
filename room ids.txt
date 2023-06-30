@@ -1,0 +1,147 @@
+Nova York, Estats Units: country 1 city 1
+
+Oficina: ACME NYC
+Sales de reunions:
+Sala Empire
+Sala Central Park
+Sala Hudson
+Sala Liberty
+Sala Times Square
+
+Londres, Regne Unit: country 2 city 2
+
+Oficina: ACME London
+Sales de reunions:
+Sala Thames
+Sala Buckingham
+Sala Hyde
+Sala Tower
+Sala Westminster
+
+París, França: country 3 city 3
+
+Oficina: ACME Paris
+Sales de reunions:
+Sala Seine
+Sala Louvre
+Sala Eiffel
+Sala Montmartre
+Sala Versalles
+
+Berlín, Alemanya: country 4 city 4
+
+Oficina: ACME Berlin
+Sales de reunions:
+Sala Spree
+Sala Brandenburg
+Sala Tiergarten
+Sala Potsdamer
+Sala Reichstag
+
+Munic, Alemanya: country 4 city 5
+
+Oficina: ACME Munich
+Sales de reunions:
+Sala Isar
+Sala Englischer Garten
+Sala Marienplatz
+Sala Nymphenburg
+Sala Oktoberfest
+
+Barcelona, Espanya: country 5 city 6
+
+Oficina: ACME Barcelona
+Sales de reunions:
+Sala Montjuïc
+Sala Tibidabo
+Sala Barceloneta
+Sala Gaudí
+Sala Sagrada Família
+
+Madrid, Espanya: country 5 city 7
+
+Oficina: ACME Madrid
+Sales de reunions:
+Sala Retiro
+Sala Prado
+Sala Gran Vía
+Sala Puerta del Sol
+Sala Reina Sofía
+
+Roma, Itàlia: country 6 city 8
+
+Oficina: ACME Rome
+Sales de reunions:
+Sala Tevere
+Sala Colosseo
+Sala Aventino
+Sala Trevi
+Sala Vatican
+
+Milà, Itàlia: country 6 city 9
+
+Oficina: ACME Milan
+Sales de reunions:
+Sala Navigli
+Sala Duomo
+Sala Brera
+Sala Porta Nuova
+Sala Sforza
+
+Tòquio, Japó: country 7 city 10
+
+Oficina: ACME Tokyo
+Sales de reunions:
+Sala Fuji
+Sala Shibuya
+Sala Ginza
+Sala Shinjuku
+Sala Harajuku
+
+Sydney, Austràlia: country 8 city 11
+
+Oficina: ACME Sydney
+Sales de reunions:
+Sala Blue Mountains
+Sala Bondi
+Sala Darling Harbour
+Sala Opera House
+Sala Manly
+
+Melbourne, Austràlia: country 8 city 12
+
+Oficina: ACME Melbourne
+Sales de reunions:
+Sala Yarra
+Sala Flinders
+Sala St Kilda
+Sala Federation
+Sala Brighton
+
+Toronto, Canadà: country 9 city 13
+
+Oficina: ACME Toronto
+Sales de reunions:
+Sala Ontario
+Sala CN Tower
+Sala Distillery
+
+Vancouver, Canadà: country 9 city 14
+
+Oficina: ACME Vancouver
+Sales de reunions:
+Sala Stanley Park
+Sala Capilano
+Sala Granville Island
+Sala Grouse Mountain
+Sala English Bay
+
+Ciutat de Mèxic, Mèxic: country 10 city 15
+
+Oficina: ACME Ciudad de México
+Sales de reunions:
+Sala Chapultepec
+Sala Zócalo
+Sala Polanco
+Sala Reforma
+Sala Coyoacán
