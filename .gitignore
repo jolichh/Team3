@@ -5,3 +5,7 @@ Microsoft.*/
 Newtonsoft.*/
 bin/
 RoomsApiCrud/.vs/
+RoomsApiCrud/bin/
+RoomsApiCrud/.vscode/
+RoomsApiCrud/obj
+RoomsApiCrud/bin
