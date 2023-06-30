@@ -23,7 +23,7 @@ namespace RoomsApiCrud.Controllers
         public RoomController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
+            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace RoomsApiCrud.Controllers
         public string GetAllRooms()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM rooms";
+            string query = "SELECT * FROM dbo.rooms";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> roomList = new();

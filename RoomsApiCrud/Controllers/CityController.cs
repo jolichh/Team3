@@ -23,7 +23,7 @@ namespace RoomsApiCrud.Controllers
         public CityController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
+            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace RoomsApiCrud.Controllers
         public string GetAllCities()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM cities";
+            string query = "SELECT * FROM dbo.cities";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> cityList = new();

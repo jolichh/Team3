@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rtvY3bjeQoAGO1xK6VpL8mfzvRQ0YQNX36s1Qfgc0rM7ybB4ebb1f67IM88GP53wbOV43rbbS2w0J55Fvb5ToA==",
+  "dgSpecHash": "WkJvppvkApWyS6SNzdVJRRq6nH3hUe3l4uY8lCHGXl8jaMCWKuR6oHynebbZXXUFIpX5IhkvN+6IKIgIzKPNzA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrud\\RoomsApiCrud.csproj",
+  "projectFilePath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrud\\RoomsApiCrud.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.7\\microsoft.aspnetcore.openapi.7.0.7.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",

@@ -23,7 +23,7 @@ namespace RoomsApiCrud.Controllers
         public OfficeController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
+            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace RoomsApiCrud.Controllers
         public string GetAllOffices()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM offices";
+            string query = "SELECT * FROM dbo.offices";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> officeList = new();

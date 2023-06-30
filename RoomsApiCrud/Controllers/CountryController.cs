@@ -23,7 +23,7 @@ namespace RoomsApiCrud.Controllers
         public CountryController(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn").ToString();
+            _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
         }
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace RoomsApiCrud.Controllers
         public string GetAllCountries()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM countries";
+            string query = "SELECT * FROM dbo.countries";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> countryList = new();
