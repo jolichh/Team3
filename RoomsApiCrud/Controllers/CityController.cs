@@ -58,11 +58,11 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllCitiesByCountry/{country.id}")]
-        public string GetAllCitiesByCountry(Country country)
+        [Route("GetAllCitiesByCountryId/{countryId}")]
+        public string GetAllCitiesByCountry(int countryId)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM cities WHERE country_id = '" + country.Id + "'";
+            string query = "SELECT * FROM cities WHERE country_id = '" +countryId+ "'";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> cityList = new();

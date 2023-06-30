@@ -58,6 +58,68 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllRoomsByOfficeId/{officeId}")]
+        public string GetAllRoomsByOfficeId(int officeId)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM rooms JOIN offices ON rooms.office_id = offices.id AND offices.id = '"+officeId+"'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> roomList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Room room = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
+                        OfficeId = Convert.ToInt32(queryResults.Rows[i]["office_id"])
+                    };
+                    roomList.Add(room);
+                }
+            }
+
+            if (roomList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(roomList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
+        [Route("GetAllRoomsByCityId/{cityId}")]
+        public string GetAllRoomsByCityId(int cityId)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM rooms JOIN offices ON rooms.office_id = offices.id JOIN cities ON offices.city_id = cities.id AND cities.id = '" + cityId + "'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> roomList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Room room = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
+                        OfficeId = Convert.ToInt32(queryResults.Rows[i]["office_id"])
+                    };
+                    roomList.Add(room);
+                }
+            }
+
+            if (roomList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(roomList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
         [Route("GetRoomByName/{name}")]
         public string GetRoomByName(string name)
         {

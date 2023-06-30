@@ -58,11 +58,42 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllOfficesByCity/{city.id}")]
-        public string GetAllOfficesByCity(City city)
+        [Route("GetAllOfficesByCountryId/{countryId}")]
+        public string GetAllOfficesByCountry(int countryId)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM offices WHERE city_id = '"+city.Id+"'";
+            string query = "SELECT * FROM offices JOIN cities ON offices.city_id = cities.id JOIN countries ON cities.country_id = countries.id AND countries.id = '" + countryId + "'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> officeList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Office office = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
+                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
+                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
+                    };
+                    officeList.Add(office);
+                }
+            }
+
+            if (officeList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(officeList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
+        [Route("GetAllOfficesByCityId/{cityId}")]
+        public string GetAllOfficesByCity(int cityId)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM offices WHERE city_id = '"+cityId+"'";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> officeList = new();

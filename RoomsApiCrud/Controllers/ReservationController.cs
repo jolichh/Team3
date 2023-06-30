@@ -61,11 +61,45 @@ namespace RoomsApiCrud.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByOffice/{office.id}")]
-        public string GetAllReservationsByOffice(Office office)
+        [Route("GetAllReservationsByCity/{cityId}")]
+        public string GetAllReservationsByCity(int cityId)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id AND offices.id = '"+office.Id+"'";
+            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id JOIN cities WHERE offices.city_id = cities.id AND cities.id = '" + cityId + "'";
+            DataTable queryResults = DAL.Query(query, connection);
+
+            List<IModel> reservationList = new();
+            if (queryResults.Rows.Count > 0)
+            {
+                for (int i = 0; i < queryResults.Rows.Count; i++)
+                {
+                    Reservation reservation = new()
+                    {
+                        Id = Convert.ToInt32(queryResults.Rows[i]["reservations.id"]),
+                        Date = Convert.ToDateTime(queryResults.Rows[i]["reservations.date"]),
+                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.start_time"]),
+                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.end_time"]),
+                        RoomId = Convert.ToInt32(queryResults.Rows[i]["reservations.room_id"]),
+                        UserId = Convert.ToInt32(queryResults.Rows[i]["reservations.user_id"])
+                    };
+                    reservationList.Add(reservation);
+                }
+            }
+
+            if (reservationList.Count > 0)
+            {
+                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
+            }
+
+            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+        }
+
+        [HttpGet]
+        [Route("GetAllReservationsByOffice/{officeId}")]
+        public string GetAllReservationsByOffice(int officeId)
+        {
+            SqlConnection connection = DAL.Connect(_connectionString);
+            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id AND offices.id = '"+officeId+"'";
             DataTable queryResults = DAL.Query(query, connection);
 
             List<IModel> reservationList = new();
