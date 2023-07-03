@@ -1,6 +1,6 @@
 namespace RoomsApiCrud.Models
 {
-    public class RoomsApiCrudRoles
+    public class RoomsApiCrudRole
     {
         public int Id { get; set;} = -1;
         public string Name { get; set;}

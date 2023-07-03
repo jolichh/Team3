@@ -28,7 +28,7 @@ namespace RoomsApiCrud.Controllers
 
         [HttpGet]
         [Route("GetAllCountries")]
-        public string GetAllCountries()
+        public ActionResult GetAllCountries()
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             string query = "SELECT * FROM dbo.countries";
@@ -50,15 +50,17 @@ namespace RoomsApiCrud.Controllers
 
             if (countryList.Count > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(countryList, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(countryList));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(countryList, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
         [Route("GetCountryByName/{name}")]
-        public string GetCountryByName(string name)
+        public ActionResult GetCountryByName(string name)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             string queryString = "SELECT * FROM countries WHERE name = '" + name + "'";
@@ -71,15 +73,17 @@ namespace RoomsApiCrud.Controllers
                     Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
                     Name = Convert.ToString(queryResults.Rows[0]["name"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(country, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(country));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(country, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpGet]
         [Route("GetCountryById/{id}")]
-        public string GetCountryById(int id)
+        public ActionResult GetCountryById(int id)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             string queryString = "SELECT * FROM countries WHERE id = '" + id + "'";
@@ -92,15 +96,17 @@ namespace RoomsApiCrud.Controllers
                     Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
                     Name = Convert.ToString(queryResults.Rows[0]["name"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(country, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(country));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(country, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpPost]
         [Route("AddCountry")]
-        public string AddCountry(Country country)
+        public ActionResult AddCountry(Country country)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO countries (name) VALUES ('"+country.Name+"')", connection);
@@ -108,15 +114,16 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
+                return StatusCode(StatusCodes.Status201Created, null);
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpPut]
         [Route("UpdateCountry")]
-        public string UpdateCountry(Country country)
+        public ActionResult UpdateCountry(Country country)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE countries SET name = '"+country.Name+"' WHERE id = '"+country.Id+"'", connection);
@@ -124,15 +131,16 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 200));
+                return StatusCode(StatusCodes.Status200OK, null);
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 200));
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpDelete]
         [Route("DeleteCountry/{id}")]
-        public string DeleteCountry(int id)
+        public ActionResult DeleteCountry(int id)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM countries WHERE id = '"+id+"'", connection);
@@ -140,10 +148,11 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
+                return StatusCode(204, null);
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
     }
 }

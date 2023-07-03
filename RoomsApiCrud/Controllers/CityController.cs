@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 using Newtonsoft.Json;
-
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -28,7 +23,7 @@ namespace RoomsApiCrud.Controllers
 
         [HttpGet]
         [Route("GetAllCities")]
-        public string GetAllCities()
+        public ActionResult GetAllCities()
         {
             string query = "SELECT * FROM dbo.cities";
             SqlConnection connection = DAL.Connect(_connectionString);
@@ -51,15 +46,18 @@ namespace RoomsApiCrud.Controllers
 
             if (cityList.Count > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(cityList));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
         [Route("GetAllCitiesByCountryId/{countryId}")]
-        public string GetAllCitiesByCountry(int countryId)
+       
+        public ActionResult GetAllCitiesByCountry(int countryId)
         {
             string query = "SELECT * FROM cities WHERE country_id = '" +countryId+ "'";
             SqlConnection connection = DAL.Connect(_connectionString);
@@ -82,15 +80,17 @@ namespace RoomsApiCrud.Controllers
 
             if (cityList.Count > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(cityList));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(cityList, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
         [Route("GetCityByName/{name}")]
-        public string GetCityByName(string name)
+        public ActionResult GetCityByName(string name)
         {
             string queryString = "SELECT * FROM cities WHERE name = '" + name + "'";
             SqlConnection connection = DAL.Connect(_connectionString);
@@ -104,15 +104,17 @@ namespace RoomsApiCrud.Controllers
                     Name = Convert.ToString(queryResults.Rows[0]["name"]),
                     CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(city));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpGet]
         [Route("GetCityById/{id}")]
-        public string GetCityById(int id)
+        public ActionResult GetCityById(int id)
         {
             string queryString = "SELECT * FROM cities WHERE id = '" + id + "'";
             SqlConnection connection = DAL.Connect(_connectionString);
@@ -126,15 +128,16 @@ namespace RoomsApiCrud.Controllers
                     Name = Convert.ToString(queryResults.Rows[0]["name"]),
                     CountryId = Convert.ToInt32(queryResults.Rows[0]["country_id"])
                 };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
+                return StatusCode(StatusCodes.Status200OK, JsonConvert.SerializeObject(city));
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(city, 200));
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpPost]
         [Route("AddCity")]
-        public string AddCity(City city)
+        public ActionResult AddCity(City city)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("INSERT INTO cities (name, country_id) VALUES ('"+city.Name+"', '"+city.CountryId+"')", connection);
@@ -142,15 +145,17 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
+                return StatusCode(StatusCodes.Status201Created, null);
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpPut]
         [Route("UpdateCity")]
-        public string UpdateCity(City city)
+        public ActionResult UpdateCity(City city)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("UPDATE cities SET name = '"+city.Name+"', country_id = '"+city.CountryId+"' WHERE id = '"+city.Id+"'", connection);
@@ -158,15 +163,16 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 200));
+            return StatusCode(StatusCodes.Status200OK, null);
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
 
         [HttpDelete]
         [Route("DeleteCity/{id}")]
-        public string DeleteCity(int id)
+        public ActionResult DeleteCity(int id)
         {
             SqlConnection connection = DAL.Connect(_connectionString);
             SqlCommand command = new("DELETE FROM cities WHERE id = '"+id+"'", connection);
@@ -174,10 +180,12 @@ namespace RoomsApiCrud.Controllers
 
             if (commandStatus > 0)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
+                return StatusCode(StatusCodes.Status204NoContent, null);
+                //return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
             }
 
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return StatusCode(StatusCodes.Status500InternalServerError);
+            //return JsonConvert.SerializeObject(ResponseFactory.Create500());
         }
     }
 }
