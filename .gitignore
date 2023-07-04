@@ -9,3 +9,5 @@ RoomsApiCrud/bin/
 RoomsApiCrud/.vscode/
 RoomsApiCrud/obj
 RoomsApiCrud/bin
+RoomsApiCrud/Dapper*
+RoomsApiAngular
