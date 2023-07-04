@@ -5,9 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddIdentity<RoomsApiCrud.Models.RoomsApiCrudUser, RoomsApiCrud.Models.RoomsApiCrudRole>().AddDefaultTokenProviders();
+
 builder.Services.AddTransient<IUserStore<RoomsApiCrud.Models.RoomsApiCrudUser>, RoomsApiCrud.Data.RoomsApiCrudUserStore>();
 builder.Services.AddTransient<IRoleStore<RoomsApiCrud.Models.RoomsApiCrudRole>, RoomsApiCrud.Data.RoomsApiCrudRoleStore>();
-builder.Services.AddIdentity<RoomsApiCrud.Models.RoomsApiCrudUser, RoomsApiCrud.Models.RoomsApiCrudRole>().AddDefaultTokenProviders();
 builder.Services.AddTransient<RoomsApiCrud.Services.IEmailSender, RoomsApiCrud.Services.EmailSender>();
 
 builder.Services.AddControllers();
