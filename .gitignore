@@ -11,3 +11,9 @@ RoomsApiCrud/obj
 RoomsApiCrud/bin
 RoomsApiCrud/Dapper*
 RoomsApiAngular
+AngularHarpreet/bin
+AngularHarpreet/.git
+AngularHarpreet/.vs
+AngularHarpreet/GPUCache
+AngularHarpreet/node_modules
+AngularHarpreet/obj
