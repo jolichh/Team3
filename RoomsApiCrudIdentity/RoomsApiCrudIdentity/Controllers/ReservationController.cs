@@ -1,17 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
-using Newtonsoft.Json;
-
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 
-using RoomsApiCrud.Models;
+using RoomsApiCrudIdentity.Data;
+using RoomsApiCrudIdentity.Entities;
 
-namespace RoomsApiCrud.Controllers
+namespace RoomsApiCrudIdentity.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,254 +14,161 @@ namespace RoomsApiCrud.Controllers
     {
         public readonly IConfiguration _configuration;
         public readonly string _connectionString;
+        private readonly RoomsApiCrudDbContext _context;
 
-        public ReservationController(IConfiguration configuration)
+        public ReservationController(IConfiguration configuration, RoomsApiCrudDbContext context)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
+            _context = context;
         }
 
         [HttpGet]
         [Route("GetAllReservations")]
-        public string GetAllReservations()
+        public async Task<IActionResult> GetAllReservations()
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM dbo.reservations";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> reservationList = new();
-            if (queryResults.Rows.Count > 0)
-            {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[i]["date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[i]["room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[i]["user_id"])
-                    };
-                    reservationList.Add(reservation);
-                }
-            }
-
-            if (reservationList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(await _context.Reservations.ToListAsync());
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByCity/{cityId}")]
-        public string GetAllReservationsByCity(int cityId)
+        [Route("GetReservationById")]
+        public async Task<IActionResult> GetReservationById(int id)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id JOIN cities WHERE offices.city_id = cities.id AND cities.id = '" + cityId + "'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> reservationList = new();
-            if (queryResults.Rows.Count > 0)
-            {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["reservations.id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[i]["reservations.date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[i]["reservations.room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[i]["reservations.user_id"])
-                    };
-                    reservationList.Add(reservation);
-                }
-            }
-
-            if (reservationList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(await _context.Reservations.FindAsync(id));
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByOffice/{officeId}")]
-        public string GetAllReservationsByOffice(int officeId)
+        [Route("GetReservationsById")]
+        public async Task<IActionResult> GetReservationsByRoomId(int roomId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations JOIN rooms ON reservations.room_id = rooms.id JOIN offices ON rooms.office_id = offices.id AND offices.id = '"+officeId+"'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> reservationList = new();
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Reservations.Where(x => x.RoomId == roomId).ToListAsync();
+            if (!result.Any())
             {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["reservations.id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[i]["reservations.date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["reservations.end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[i]["reservations.room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[i]["reservations.user_id"])
-                    };
-                    reservationList.Add(reservation);
-                }
+                return NotFound();
             }
-
-            if (reservationList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByRoom/{room.id}")]
-        public string GetAllReservationsByRoom(Room room)
+        [Route("GetReservationsByOfficeId")]
+        public async Task<IActionResult> GetReservationsByOfficeId(int officeId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations WHERE room_id = '"+room.Id+"'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> reservationList = new();
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Reservations.Join(
+                    _context.Rooms,
+                    office => office.RoomId,
+                    room => room.Id,
+                    (office, room) => new { Reservation = office, Room = room })
+                .Join(
+                    _context.Offices,
+                    roomReservation => roomReservation.Room.OfficeId,
+                    office => office.Id,
+                    (roomReservation, office) => new { OfficeId = roomReservation.Room.OfficeId, Id = office.Id })
+                .Where(
+                    officeRoomReservation => officeRoomReservation.Id == officeId)
+                .ToListAsync();
+            if (!result.Any())
             {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[i]["date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[i]["room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[i]["user_id"])
-                    };
-                    reservationList.Add(reservation);
-                }
+                return NotFound();
             }
-
-            if (reservationList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetAllReservationsByUser/{id}")]
-        public string GetAllReservationsByUser(int id)
+        [Route("GetReservationsByCityId")]
+        public async Task<IActionResult> GetReservationsByCityId(int cityId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM reservations WHERE user_id = '"+id+"'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> reservationList = new();
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Reservations.Join(
+                    _context.Rooms,
+                    office => office.RoomId,
+                    room => room.Id,
+                    (office, room) => new { Reservation = office, Room = room })
+                .Join(
+                    _context.Offices,
+                    roomReservation => roomReservation.Room.OfficeId,
+                    office => office.Id,
+                    (roomReservation, office) => new { roomReservation, Office = office })
+                .Join(
+                    _context.Cities,
+                    officeRoomReservation => officeRoomReservation.Office.CityId,
+                    city => city.Id,
+                    (officeRoomReservation, city) => new { CityId = officeRoomReservation.Office.CityId, Id = city.Id }
+                )
+                .Where(
+                    cityOfficeRoomReservation => cityOfficeRoomReservation.CityId == cityId)
+                .ToListAsync();
+            if (!result.Any())
             {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[i]["date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[i]["start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[i]["end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[i]["room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[i]["user_id"])
-                    };
-                    reservationList.Add(reservation);
-                }
+                return NotFound();
             }
-
-            if (reservationList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(reservationList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetReservationById/{id}")]
-        public string GetReservationById(int id)
+        [Route("GetReservationsByCountryId")]
+        public async Task<IActionResult> GetReservationsByCountryId(int countryId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM reservations WHERE id = '" + id + "'";
-            DataTable queryResults = DAL.Query(queryString, connection);
-
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Reservations.Join(
+                    _context.Rooms,
+                    office => office.RoomId,
+                    room => room.Id,
+                    (office, room) => new { Reservation = office, Room = room })
+                .Join(
+                    _context.Offices,
+                    roomReservation => roomReservation.Room.OfficeId,
+                    office => office.Id,
+                    (roomReservation, office) => new { roomReservation, Office = office })
+                .Join(
+                    _context.Cities,
+                    officeRoomReservation => officeRoomReservation.Office.CityId,
+                    city => city.Id,
+                    (officeRoomReservation, city) => new { officeRoomReservation, City = city }
+                )
+                .Join(
+                    _context.Countries,
+                    cityOfficeRoomReservation => cityOfficeRoomReservation.City.CountryId,
+                    country => country.Id,
+                    (cityOfficeRoomReservation, country) => new { CountryId = cityOfficeRoomReservation.City.CountryId, Id = country.Id })
+                .Where(
+                    countryCityOfficeRoomReservation => countryCityOfficeRoomReservation.CountryId == countryId)
+                .ToListAsync();
+            if (!result.Any())
             {
-                Reservation reservation = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
-                        Date = Convert.ToDateTime(queryResults.Rows[0]["date"]),
-                        StartTime = Convert.ToDateTime(queryResults.Rows[0]["start_time"]),
-                        EndTime = Convert.ToDateTime(queryResults.Rows[0]["end_time"]),
-                        RoomId = Convert.ToInt32(queryResults.Rows[0]["room_id"]),
-                        UserId = Convert.ToInt32(queryResults.Rows[0]["user_id"])
-                    };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(reservation, 200));
+                return NotFound();
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpPost]
-        [Route("AddReservation")]
-        public string AddReservation(Reservation reservation)
+        [Route("CreateReservation")]
+        [HttpPost]
+        public async Task<IActionResult> CreateReservation(Reservation office)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("INSERT INTO reservations (date, start_time, end_time, room_id, user_id) VALUES ('"+reservation.Date+"', '"+reservation.StartTime+"', '"+reservation.EndTime+"', '"+reservation.RoomId+"', '"+reservation.UserId+"',)", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Reservations.Add(office);
+            await _context.SaveChangesAsync();
+            return Created($"/GetReservationById?id={office.Id}", office);
         }
 
         [HttpPut]
         [Route("UpdateReservation")]
-        public string UpdateReservation(Reservation reservation)
+        public async Task<IActionResult> UpdateReservation(Reservation officeToUpdate)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("UPDATE reservations SET id = '"+reservation.Id+"', date = '"+reservation.Date+"', start_time = '"+reservation.StartTime+"', end_time = '"+reservation.EndTime+"', room_id = '"+reservation.RoomId+"', user_id = '"+reservation.UserId+"' WHERE id = '"+reservation.Id+"'", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Reservations.Update(officeToUpdate);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete]
-        [Route("DeleteReservation/{id}")]
-        public string DeleteReservation(int id)
+        [Route("DeleteReservation{id}")]
+        public async Task<IActionResult> DeleteReservation(int id)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("DELETE FROM reservations WHERE id = '"+id+"'", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
+            var officeToDelete = await _context.Reservations.FindAsync(id);
+            if (officeToDelete == null)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
+                return NotFound();
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Reservations.Remove(officeToDelete);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

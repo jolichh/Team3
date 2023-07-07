@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
-using RoomsApiCrud.Models;
+using RoomsApiCrudIdentity.Models;
 
-namespace RoomsApiCrud.Controllers
+namespace RoomsApiCrudIdentity.Controllers
 {
     public class DAL
     {

@@ -1,4 +1,4 @@
-namespace RoomsApiCrud.Models
+namespace RoomsApiCrudIdentity.Models
 {
     public class Response<T>
     {

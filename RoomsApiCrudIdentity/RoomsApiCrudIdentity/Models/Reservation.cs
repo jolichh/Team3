@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace RoomsApiCrud.Models
+namespace RoomsApiCrudIdentity.Models
 {
     public class Reservation : IModel
     {

@@ -1,17 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
-using Newtonsoft.Json;
-
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 
-using RoomsApiCrud.Models;
+using RoomsApiCrudIdentity.Data;
+using RoomsApiCrudIdentity.Entities;
 
-namespace RoomsApiCrud.Controllers
+namespace RoomsApiCrudIdentity.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,196 +14,96 @@ namespace RoomsApiCrud.Controllers
     {
         public readonly IConfiguration _configuration;
         public readonly string _connectionString;
+        private readonly RoomsApiCrudDbContext _context;
 
-        public OfficeController(IConfiguration configuration)
+        public OfficeController(IConfiguration configuration, RoomsApiCrudDbContext context)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("RoomsApiCrudConn")!;
+            _context = context;
         }
 
         [HttpGet]
         [Route("GetAllOffices")]
-        public string GetAllOffices()
+        public async Task<IActionResult> GetAllOffices()
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM dbo.offices";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> officeList = new();
-            if (queryResults.Rows.Count > 0)
-            {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Office office = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
-                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
-                    };
-                    officeList.Add(office);
-                }
-            }
-
-            if (officeList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(officeList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(await _context.Offices.ToListAsync());
         }
 
         [HttpGet]
-        [Route("GetAllOfficesByCountryId/{countryId}")]
-        public string GetAllOfficesByCountry(int countryId)
+        [Route("GetOfficeById")]
+        public async Task<IActionResult> GetOfficeById(int id)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM offices JOIN cities ON offices.city_id = cities.id JOIN countries ON cities.country_id = countries.id AND countries.id = '" + countryId + "'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> officeList = new();
-            if (queryResults.Rows.Count > 0)
-            {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Office office = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
-                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
-                    };
-                    officeList.Add(office);
-                }
-            }
-
-            if (officeList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(officeList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(await _context.Offices.FindAsync(id));
         }
 
         [HttpGet]
-        [Route("GetAllOfficesByCityId/{cityId}")]
-        public string GetAllOfficesByCity(int cityId)
+        [Route("GetOfficesByCityId")]
+        public async Task<IActionResult> GetOfficesByCityId(int cityId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string query = "SELECT * FROM offices WHERE city_id = '"+cityId+"'";
-            DataTable queryResults = DAL.Query(query, connection);
-
-            List<IModel> officeList = new();
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Offices.Where(x => x.CityId == cityId).ToListAsync();
+            if (!result.Any())
             {
-                for (int i = 0; i < queryResults.Rows.Count; i++)
-                {
-                    Office office = new()
-                    {
-                        Id = Convert.ToInt32(queryResults.Rows[i]["id"]),
-                        Name = Convert.ToString(queryResults.Rows[i]["name"]),
-                        CityId = Convert.ToInt32(queryResults.Rows[i]["city_id"])
-                    };
-                    officeList.Add(office);
-                }
+                return NotFound();
             }
-
-            if (officeList.Count > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateListResultSuccess(officeList, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpGet]
-        [Route("GetOfficeByName/{name}")]
-        public string GetOfficeByName(string name)
+        [Route("GetOfficesByCountryId")]
+        public async Task<IActionResult> GetOfficesByCountryId(int countryId)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM offices WHERE name = '" + name + "'";
-            DataTable queryResults = DAL.Query(queryString, connection);
-
-            if (queryResults.Rows.Count > 0)
+            var result = await _context.Offices.Join(
+                    _context.Cities,
+                    office => office.CityId,
+                    city => city.Id,
+                    (office, city) => new { Office = office, City = city })
+                .Join(
+                    _context.Countries,
+                    cityOffice => cityOffice.City.CountryId,
+                    country => country.Id,
+                    (cityOffice, country) => new { CountryId = cityOffice.City.CountryId, Id = country.Id })
+                .Where(
+                    countryCityOffice => countryCityOffice.Id == countryId)
+                .ToListAsync();
+            if (!result.Any())
             {
-                Office office = new() 
-                {
-                    Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
-                    Name = Convert.ToString(queryResults.Rows[0]["name"]),
-                    CityId = Convert.ToInt32(queryResults.Rows[0]["city_id"])
-                };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(office, 200));
+                return NotFound();
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
-        }
-
-        [HttpGet]
-        [Route("GetOfficeById/{id}")]
-        public string GetOfficeById(int id)
-        {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            string queryString = "SELECT * FROM offices WHERE id = '" + id + "'";
-            DataTable queryResults = DAL.Query(queryString, connection);
-
-            if (queryResults.Rows.Count > 0)
-            {
-                Office office = new() 
-                {
-                    Id = Convert.ToInt32(queryResults.Rows[0]["id"]),
-                    Name = Convert.ToString(queryResults.Rows[0]["name"]),
-                    CityId = Convert.ToInt32(queryResults.Rows[0]["city_id"])
-                };
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(office, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            return Ok(result);
         }
 
         [HttpPost]
-        [Route("AddOffice")]
-        public string AddOffice(Office office)
+        [Route("CreateOffice")]
+        [HttpPost]
+        public async Task<IActionResult> CreateOffice(Office office)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("INSERT INTO offices (name, city_id) VALUES ('"+office.Name+"', '"+office.CityId+"')", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 201));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Offices.Add(office);
+            await _context.SaveChangesAsync();
+            return Created($"/GetOfficeById?id={office.Id}", office);
         }
 
         [HttpPut]
         [Route("UpdateOffice")]
-        public string UpdateOffice(Office office)
+        public async Task<IActionResult> UpdateOffice(Office officeToUpdate)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("UPDATE offices SET name = '"+office.Name+"', city_id = '"+office.CityId+"' WHERE id = '"+office.Id+"'", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
-            {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 200));
-            }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Offices.Update(officeToUpdate);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpDelete]
-        [Route("DeleteOffice/{id}")]
-        public string DeleteOffice(int id)
+        [Route("DeleteOffice{id}")]
+        public async Task<IActionResult> DeleteOffice(int id)
         {
-            SqlConnection connection = DAL.Connect(_connectionString);
-            SqlCommand command = new("DELETE FROM offices WHERE id = '"+id+"'", connection);
-            int commandStatus = DAL.Command(command, connection);
-
-            if (commandStatus > 0)
+            var officeToDelete = await _context.Offices.FindAsync(id);
+            if (officeToDelete == null)
             {
-                return JsonConvert.SerializeObject(ResponseFactory.CreateSingleResultSuccess(null, 204));
+                return NotFound();
             }
-
-            return JsonConvert.SerializeObject(ResponseFactory.Create500());
+            _context.Offices.Remove(officeToDelete);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
