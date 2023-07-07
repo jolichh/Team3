@@ -11,7 +11,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDbContext<RoomsApiCrudDbContext>(options =>
     options.UseSqlServer(connectionString,
-    ef => ef.MigrationsAssembly(typeof(RoomsApiCrudDbContext).Assembly.FullName)));
+        ef => ef.MigrationsAssembly(typeof(RoomsApiCrudDbContext)
+            .Assembly
+            .FullName)));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

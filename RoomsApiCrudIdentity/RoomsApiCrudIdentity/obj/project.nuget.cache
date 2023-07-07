@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "HtpowfY5XM7yEdb4FkWy+hZIq95m97npFd/4oYE9kGWXejKnJq8JpfQyAQz8hHuvVXn43+Yhcx0idcoRtiq+pw==",
+  "dgSpecHash": "jpQaJB3PsN6VAKZbjOokjfzqVaCG2hh2a4VrWgVgjTC3oI+4mt+rbgVy79TMvlmsolWzlH8QKczhz4uOm7NNnw==",
   "success": true,
   "projectFilePath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
   "expectedPackageFiles": [
@@ -128,7 +128,7 @@
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\celia.casanovas\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\celia.casanovas\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\nuget.common\\6.3.1\\nuget.common.6.3.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\nuget.configuration\\6.3.1\\nuget.configuration.6.3.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\nuget.dependencyresolver.core\\6.3.1\\nuget.dependencyresolver.core.6.3.1.nupkg.sha512",
