@@ -41,7 +41,10 @@ namespace RoomsApiCrudIdentity.Controllers
         [Route("GetRoomsByOfficeId")]
         public async Task<IActionResult> GetRoomsByOfficeId(int officeId)
         {
-            var result = await _context.Rooms.Where(x => x.OfficeId == officeId).ToListAsync();
+            var result = await _context.Rooms
+                .Where(
+                    room => room.OfficeId == officeId)
+                .ToListAsync();
             if (!result.Any())
             {
                 return NotFound();
@@ -105,7 +108,6 @@ namespace RoomsApiCrudIdentity.Controllers
 
         [HttpPost]
         [Route("CreateOffice")]
-        [HttpPost]
         public async Task<IActionResult> CreateOffice(Office office)
         {
             _context.Offices.Add(office);

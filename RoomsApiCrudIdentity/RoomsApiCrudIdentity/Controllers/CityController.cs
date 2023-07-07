@@ -41,17 +41,19 @@ namespace RoomsApiCrudIdentity.Controllers
         [Route("GetCitiesByCountryId")]
         public async Task<IActionResult> GetCitiesByCountryId(int countryId)
         {
-            var result = await _context.Cities.Where(x => x.CountryId == countryId).ToListAsync();
+            var result = await _context.Cities
+                .Where(
+                    city => city.CountryId == countryId)
+                .ToListAsync();
             if (!result.Any())
             {
                 return NotFound();
             }
-            return Ok(await _context.Cities.Where(x => x.CountryId == countryId).ToListAsync());
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("CreateCity")]
-        [HttpPost]
         public async Task<IActionResult> CreateCity(City city)
         {
             _context.Cities.Add(city);

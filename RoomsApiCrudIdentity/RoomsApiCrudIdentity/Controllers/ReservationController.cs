@@ -41,7 +41,10 @@ namespace RoomsApiCrudIdentity.Controllers
         [Route("GetReservationsById")]
         public async Task<IActionResult> GetReservationsByRoomId(int roomId)
         {
-            var result = await _context.Reservations.Where(x => x.RoomId == roomId).ToListAsync();
+            var result = await _context.Reservations
+                .Where(
+                    reservation => reservation.RoomId == roomId)
+                .ToListAsync();
             if (!result.Any())
             {
                 return NotFound();
@@ -55,9 +58,9 @@ namespace RoomsApiCrudIdentity.Controllers
         {
             var result = await _context.Reservations.Join(
                     _context.Rooms,
-                    office => office.RoomId,
+                    reservation => reservation.RoomId,
                     room => room.Id,
-                    (office, room) => new { Reservation = office, Room = room })
+                    (reservation, room) => new { Reservation = reservation, Room = room })
                 .Join(
                     _context.Offices,
                     roomReservation => roomReservation.Room.OfficeId,
@@ -79,9 +82,9 @@ namespace RoomsApiCrudIdentity.Controllers
         {
             var result = await _context.Reservations.Join(
                     _context.Rooms,
-                    office => office.RoomId,
+                    reservation => reservation.RoomId,
                     room => room.Id,
-                    (office, room) => new { Reservation = office, Room = room })
+                    (reservation, room) => new { Reservation = reservation, Room = room })
                 .Join(
                     _context.Offices,
                     roomReservation => roomReservation.Room.OfficeId,
@@ -109,9 +112,9 @@ namespace RoomsApiCrudIdentity.Controllers
         {
             var result = await _context.Reservations.Join(
                     _context.Rooms,
-                    office => office.RoomId,
+                    reservation => reservation.RoomId,
                     room => room.Id,
-                    (office, room) => new { Reservation = office, Room = room })
+                    (reservation, room) => new { Reservation = reservation, Room = room })
                 .Join(
                     _context.Offices,
                     roomReservation => roomReservation.Room.OfficeId,
@@ -140,19 +143,18 @@ namespace RoomsApiCrudIdentity.Controllers
 
         [HttpPost]
         [Route("CreateReservation")]
-        [HttpPost]
-        public async Task<IActionResult> CreateReservation(Reservation office)
+        public async Task<IActionResult> CreateReservation(Reservation reservation)
         {
-            _context.Reservations.Add(office);
+            _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
-            return Created($"/GetReservationById?id={office.Id}", office);
+            return Created($"/GetReservationById?id={reservation.Id}", reservation);
         }
 
         [HttpPut]
         [Route("UpdateReservation")]
-        public async Task<IActionResult> UpdateReservation(Reservation officeToUpdate)
+        public async Task<IActionResult> UpdateReservation(Reservation reservationToUpdate)
         {
-            _context.Reservations.Update(officeToUpdate);
+            _context.Reservations.Update(reservationToUpdate);
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -161,12 +163,12 @@ namespace RoomsApiCrudIdentity.Controllers
         [Route("DeleteReservation{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
         {
-            var officeToDelete = await _context.Reservations.FindAsync(id);
-            if (officeToDelete == null)
+            var reservationToDelete = await _context.Reservations.FindAsync(id);
+            if (reservationToDelete == null)
             {
                 return NotFound();
             }
-            _context.Reservations.Remove(officeToDelete);
+            _context.Reservations.Remove(reservationToDelete);
             await _context.SaveChangesAsync();
             return NoContent();
         }
