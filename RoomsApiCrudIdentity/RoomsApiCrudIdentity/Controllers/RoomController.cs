@@ -91,7 +91,7 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Countries,
                     cityOfficeRoom => cityOfficeRoom.City.CountryId,
                     country => country.Id,
-                    (cityOfficeRoom, country) => new {CountryId = cityOfficeRoom.Cities.CountryId, Id = country.Id }
+                    (cityOfficeRoom, country) => new {CountryId = cityOfficeRoom.City.CountryId, Id = country.Id }
                     )
                 .Where(
                     countryCityOfficeRoom => countryCityOfficeRoom.Id == countryId)

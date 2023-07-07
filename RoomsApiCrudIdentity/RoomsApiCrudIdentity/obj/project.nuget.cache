@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HtpowfY5XM7yEdb4FkWy+hZIq95m97npFd/4oYE9kGWXejKnJq8JpfQyAQz8hHuvVXn43+Yhcx0idcoRtiq+pw==",
+  "dgSpecHash": "i77rQiG7XnKpqZev3SRxBNlOWsdV/IL5KGWGppr1JWR5grG3+HJvqmk09dx60q7RnPfCshlSBVW63NfcjZlNFg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
+  "projectFilePath": "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

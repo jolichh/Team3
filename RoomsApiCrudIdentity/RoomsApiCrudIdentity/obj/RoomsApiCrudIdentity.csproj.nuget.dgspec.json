@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj": {}
+    "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj": {}
   },
   "projects": {
-    "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj": {
+    "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
+        "projectUniqueName": "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
         "projectName": "RoomsApiCrudIdentity",
-        "projectPath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
+        "projectPath": "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
         "packagesPath": "C:\\Users\\celia.casanovas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\obj\\",
+        "outputPath": "c:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\celia.casanovas\\AppData\\Roaming\\NuGet\\NuGet.Config",
