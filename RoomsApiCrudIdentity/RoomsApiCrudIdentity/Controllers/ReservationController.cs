@@ -65,9 +65,9 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Offices,
                     roomReservation => roomReservation.Room.OfficeId,
                     office => office.Id,
-                    (roomReservation, office) => new { OfficeId = roomReservation.Room.OfficeId, Id = office.Id })
+                    (roomReservation, office) => new { Room = roomReservation.Room, Office = office })
                 .Where(
-                    officeRoomReservation => officeRoomReservation.Id == officeId)
+                    officeRoomReservation => officeRoomReservation.Room.OfficeId == officeId)
                 .ToListAsync();
             if (!result.Any())
             {
@@ -94,10 +94,10 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Cities,
                     officeRoomReservation => officeRoomReservation.Office.CityId,
                     city => city.Id,
-                    (officeRoomReservation, city) => new { CityId = officeRoomReservation.Office.CityId, Id = city.Id }
+                    (officeRoomReservation, city) => new { Office = officeRoomReservation.Office, City = city }
                 )
                 .Where(
-                    cityOfficeRoomReservation => cityOfficeRoomReservation.CityId == cityId)
+                    cityOfficeRoomReservation => cityOfficeRoomReservation.Office.CityId == cityId)
                 .ToListAsync();
             if (!result.Any())
             {
@@ -130,9 +130,9 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Countries,
                     cityOfficeRoomReservation => cityOfficeRoomReservation.City.CountryId,
                     country => country.Id,
-                    (cityOfficeRoomReservation, country) => new { CountryId = cityOfficeRoomReservation.City.CountryId, Id = country.Id })
+                    (cityOfficeRoomReservation, country) => new { City = cityOfficeRoomReservation.City, Country = country })
                 .Where(
-                    countryCityOfficeRoomReservation => countryCityOfficeRoomReservation.CountryId == countryId)
+                    countryCityOfficeRoomReservation => countryCityOfficeRoomReservation.City.CountryId == countryId)
                 .ToListAsync();
             if (!result.Any())
             {

@@ -65,9 +65,9 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Cities,
                     officeRoom => officeRoom.Office.CityId,
                     city => city.Id,
-                    (officeRoom, city) => new { CityId = officeRoom.Office.CityId, Id = city.Id })
+                    (officeRoom, city) => new { Office = officeRoom.Office, City = city })
                 .Where(
-                    cityOfficeRoom => cityOfficeRoom.Id == cityId)
+                    cityOfficeRoom => cityOfficeRoom.Office.CityId == cityId)
                 .ToListAsync();
             if (!result.Any())
             {
@@ -94,10 +94,10 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Countries,
                     cityOfficeRoom => cityOfficeRoom.City.CountryId,
                     country => country.Id,
-                    (cityOfficeRoom, country) => new {CountryId = cityOfficeRoom.City.CountryId, Id = country.Id }
+                    (cityOfficeRoom, country) => new {City = cityOfficeRoom.City, Country = country }
                     )
                 .Where(
-                    countryCityOfficeRoom => countryCityOfficeRoom.Id == countryId)
+                    countryCityOfficeRoom => countryCityOfficeRoom.City.CountryId == countryId)
                 .ToListAsync();
             if (!result.Any())
             {
@@ -107,33 +107,33 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpPost]
-        [Route("CreateOffice")]
-        public async Task<IActionResult> CreateOffice(Office office)
+        [Route("CreateRoom")]
+        public async Task<IActionResult> CreateRoom(Room room)
         {
-            _context.Offices.Add(office);
+            _context.Rooms.Add(room);
             await _context.SaveChangesAsync();
-            return Created($"/GetOfficeById?id={office.Id}", office);
+            return Created($"/GetOfficeById?id={room.Id}", room);
         }
 
         [HttpPut]
-        [Route("UpdateOffice")]
-        public async Task<IActionResult> UpdateOffice(Office officeToUpdate)
+        [Route("UpdateRoom")]
+        public async Task<IActionResult> UpdateRoom(Room roomToUpdate)
         {
-            _context.Offices.Update(officeToUpdate);
+            _context.Rooms.Update(roomToUpdate);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("DeleteOffice{id}")]
-        public async Task<IActionResult> DeleteOffice(int id)
+        [Route("DeleteRoom{id}")]
+        public async Task<IActionResult> DeleteRoom(int id)
         {
-            var officeToDelete = await _context.Offices.FindAsync(id);
-            if (officeToDelete == null)
+            var roomToDelete = await _context.Rooms.FindAsync(id);
+            if (roomToDelete == null)
             {
                 return NotFound();
             }
-            _context.Offices.Remove(officeToDelete);
+            _context.Rooms.Remove(roomToDelete);
             await _context.SaveChangesAsync();
             return NoContent();
         }

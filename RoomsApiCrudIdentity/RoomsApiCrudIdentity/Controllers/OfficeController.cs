@@ -65,9 +65,9 @@ namespace RoomsApiCrudIdentity.Controllers
                     _context.Countries,
                     cityOffice => cityOffice.City.CountryId,
                     country => country.Id,
-                    (cityOffice, country) => new { CountryId = cityOffice.City.CountryId, Id = country.Id })
+                    (cityOffice, country) => new { City = cityOffice.City, Country = country })
                 .Where(
-                    countryCityOffice => countryCityOffice.Id == countryId)
+                    countryCityOffice => countryCityOffice.City.Id == countryId)
                 .ToListAsync();
             if (!result.Any())
             {
