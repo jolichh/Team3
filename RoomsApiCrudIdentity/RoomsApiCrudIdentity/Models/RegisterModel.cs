@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
 namespace RoomsApiCrudIdentity.Models
 {
     public class RegisterModel

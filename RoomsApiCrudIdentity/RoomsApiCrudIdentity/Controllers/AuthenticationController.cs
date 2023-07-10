@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using RoomsApiCrudIdentity.Models;
-using NuGet.Packaging.Signing;
-using Microsoft.Identity.Client;
 
 namespace RoomsApiCrudIdentity.Controllers
 {
