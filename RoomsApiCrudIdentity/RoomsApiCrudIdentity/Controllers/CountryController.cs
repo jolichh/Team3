@@ -1,13 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.EntityFrameworkCore;
 
 using System.Data;
 
 using RoomsApiCrudIdentity.Data;
 using RoomsApiCrudIdentity.Entities;
+using RoomsApiCrudIdentity.Models;
 
 namespace RoomsApiCrudIdentity.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CountryController : ControllerBase
@@ -37,9 +41,9 @@ namespace RoomsApiCrudIdentity.Controllers
             return Ok(await _context.Countries.FindAsync(id));
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost]
         [Route("CreateCountry")]
-        [HttpPost]
         public async Task<IActionResult> CreateCountry(Country country)
         {
             _context.Countries.Add(country);
@@ -47,6 +51,7 @@ namespace RoomsApiCrudIdentity.Controllers
             return Created($"/GetCountryById?id={country.Id}", country);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut]
         [Route("UpdateCountry")]
         public async Task<IActionResult> UpdateCountry(Country countryToUpdate)
@@ -56,6 +61,7 @@ namespace RoomsApiCrudIdentity.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete]
         [Route("DeleteCountry{id}")]
         public async Task<IActionResult> DeleteCountry(int id)

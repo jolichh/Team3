@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jpQaJB3PsN6VAKZbjOokjfzqVaCG2hh2a4VrWgVgjTC3oI+4mt+rbgVy79TMvlmsolWzlH8QKczhz4uOm7NNnw==",
+  "dgSpecHash": "4rCfmurTVe8kqyCEXghTbybfwkOvK4VEaZj2Rm+2L59dNDJSusfqr5VOomLbK1y1yo26NcX5tu/oBBJJbA6d1g==",
   "success": true,
   "projectFilePath": "C:\\Users\\celia.casanovas\\Projectes\\APIACME\\Team3\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity\\RoomsApiCrudIdentity.csproj",
   "expectedPackageFiles": [
@@ -56,6 +56,7 @@
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\humanizer.core.zh-cn\\2.14.1\\humanizer.core.zh-cn.2.14.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\humanizer.core.zh-hans\\2.14.1\\humanizer.core.zh-hans.2.14.1.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\humanizer.core.zh-hant\\2.14.1\\humanizer.core.zh-hant.2.14.1.nupkg.sha512",
+    "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.8\\microsoft.aspnetcore.authentication.jwtbearer.7.0.8.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.7\\microsoft.aspnetcore.cryptography.internal.7.0.7.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.7\\microsoft.aspnetcore.cryptography.keyderivation.7.0.7.nupkg.sha512",
     "C:\\Users\\celia.casanovas\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\7.0.7\\microsoft.aspnetcore.diagnostics.entityframeworkcore.7.0.7.nupkg.sha512",

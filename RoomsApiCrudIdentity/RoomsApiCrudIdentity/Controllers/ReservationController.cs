@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 using System.Data;
@@ -8,6 +9,7 @@ using RoomsApiCrudIdentity.Entities;
 
 namespace RoomsApiCrudIdentity.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ReservationController : ControllerBase
