@@ -45,6 +45,8 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.Configure<PasswordHasherOptions>(opt => opt.IterationCount = 210_000);
+
 // default scaffolded Identity
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<ApplicationDbContext>();

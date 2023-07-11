@@ -40,7 +40,7 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpGet]
-        [Route("GetReservationsById")]
+        [Route("GetReservationsByRoomId")]
         public async Task<IActionResult> GetReservationsByRoomId(int roomId)
         {
             var result = await _context.Reservations
@@ -162,7 +162,7 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteReservation{id}")]
+        [Route("DeleteReservation")]
         public async Task<IActionResult> DeleteReservation(int id)
         {
             var reservationToDelete = await _context.Reservations.FindAsync(id);

@@ -37,7 +37,7 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] RoomsApiCrudIdentity.Models.LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -69,7 +69,7 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RoomsApiCrudIdentity.Models.RegisterModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.UserName);
@@ -106,7 +106,7 @@ namespace RoomsApiCrudIdentity.Controllers
         }
 
         [HttpPost]
-        [Route("registerAdmin")]
+        [Route("RegisterAdmin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RoomsApiCrudIdentity.Models.RegisterModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.UserName);

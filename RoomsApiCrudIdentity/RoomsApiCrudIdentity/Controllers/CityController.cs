@@ -77,7 +77,7 @@ namespace RoomsApiCrudIdentity.Controllers
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete]
-        [Route("DeleteCity{id}")]
+        [Route("DeleteCity")]
         public async Task<IActionResult> DeleteCity(int id)
         {
             var cityToDelete = await _context.Cities.FindAsync(id);
